@@ -1,0 +1,160 @@
+<template>
+  <el-amap ref="map" vid="t-amap" v-bind="innerMapProp" class="t-amap-map">
+    <!-- ******************线路****************** -->
+    <template v-if="polylines != null">
+      <!-- 线路路径 -->
+      <el-amap-polyline
+        v-for="(polyline, index) in polylines"
+        v-bind="polyline"
+        :key="index+'polyline'"
+      ></el-amap-polyline>
+      <!-- 线路拐点markersGroup -->
+      <template v-for="(polylineCircleMarker,indexp) in innerPolylineCircleMarker">
+        <!-- 线路拐点markers -->
+        <el-amap-circle-marker
+          v-for="(marker,indexs) in polylineCircleMarker"
+          v-bind="marker"
+          :key="indexp+'polylineMarker'+indexs"
+        ></el-amap-circle-marker>
+      </template>
+    </template>
+
+    <!-- ******************地图标记点****************** -->
+    <template v-if="customMarkers != null">
+      <template v-for="(marker,indexp) in customMarkers">
+        <!-- 定点图标marker -->
+        <el-amap-marker
+          v-if="marker.normalMarker"
+          v-bind="{...marker, ...marker.normalMarker}"
+          :key="indexp+'normalMarker'"
+        ></el-amap-marker>
+        <!-- 轮廓marker 可以有动画 -->
+        <el-amap-marker
+          v-if="marker.rippleMarker"
+          v-bind="{...marker, ...marker.rippleMarker}"
+          :key="indexp+'rippleMarker'"
+        >
+          <t-ripple-cicle v-bind="{...marker, ...marker.rippleMarker}"></t-ripple-cicle>
+        </el-amap-marker>
+      </template>
+    </template>
+    <!-- ******************信息窗体****************** -->
+    <el-amap-info-window v-if="infoProp != null" v-bind="infoProp">
+      <slot name="t-amap-info-window">please custom you info window!</slot>
+    </el-amap-info-window>
+  </el-amap>
+</template>
+
+<script>
+import TRippleCicle from "./TRippleCicle";
+export default {
+  name: "HelloWorld",
+  components: {
+    TRippleCicle
+  },
+  props: {
+    //信息窗口
+    infoProp: {
+      type: Object,
+      default: () => null
+    },
+    //地图属性
+    mapProp: {
+      type: Object,
+      default: () => {}
+    },
+    //线路 数组每一项代表一条线
+    polylines: {
+      type: Array,
+      default: () => null
+    },
+    //线路拐点 每一项认为是一条线的所有拐点 如果不填 则根据polylines里每条线的坐标、颜色默认显示 innerPolylineCircleMarker
+    polylineCircleMarkers: {
+      type: Array,
+      default: () => []
+    },
+    //地图标记点 支持icon 轮廓  水波纹动画
+    /**
+     * 每一项有下面两个属性 可以在内层定义各自的属性 外层属性为公共属性
+     * normalMarker //普通marker 属性和官网文档一样
+     * rippleMarker //波纹marker 相关属性看 RippleCicle
+     */
+    customMarkers: {
+      type: Array,
+      default: () => null
+    }
+  },
+  computed: {
+    //计算线路拐点marker
+    innerPolylineCircleMarker() {
+      if (this.polylineCircleMarkers.length > 0) {
+        return this.polylineCircleMarkers;
+      }
+      if (this.polylines.length > 0) {
+        //线路拐点
+        let markersGroup = [];
+        this.polylines.forEach(polyline => {
+          let markers = [];
+          polyline.path.forEach(value => {
+            //地图线路应该是直接引用了 这里value值由数组变成了 对象类型 center需要数组类型
+            const center =
+              value instanceof Array ? value : [value.lng, value.lat];
+            markers.push({
+              center: center,
+              radius: value.strokeWeight ? value.strokeWeight : 4,
+              zIndex: 100,
+              strokeWeight: 2,
+              strokeColor: "blue",
+              //   events: polyline.events,
+              fillColor: "#fff"
+            });
+          });
+          markersGroup.push(markers);
+        });
+        return markersGroup;
+      }
+    }
+  },
+  data: function() {
+    return {
+      innerMapProp: {}
+    };
+  },
+  watch: {
+    mapProp() {
+      this.refreshMapData();
+    }
+  },
+  created() {
+    this.refreshMapData();
+  },
+  methods: {
+    //整理地图属性数据
+    refreshMapData() {
+      this.innerMapProp = Object.assign(
+        {},
+        {
+          zooms: [3, 18],
+          zoom: 12,
+          mapStyle: "amap://styles/whitesmoke",
+          lang: "zh_cn",
+          plugin: [
+            {
+              pName: "Scale",
+              position: "RB"
+            }
+          ]
+        },
+        this.innerMapProp,
+        this.mapProp
+      );
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.t-amap-map {
+}
+</style>
