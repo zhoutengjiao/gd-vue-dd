@@ -85,6 +85,7 @@ export default {
             this.mapProp = {
               center
             };
+            this.add(...center)
           }
         }
       },
@@ -191,19 +192,12 @@ export default {
     customMarkers.push(
       {
         position: [121.5389385, 31.21515],
-        normalMarker: {
-          icon: "/point_start.png",
+        offset: [-33, -33],
+        tr_iconOffset: [0, 0],
+          tr_icon: require("@/assets/point.png"),
           label: { content: "施工", offset: [25, 38] },
-          offset: [-12, -38],
-          zIndex:10
-        },
-        rippleMarker: {
-          radius: 33,
-          offset: [-33, -33],
-          fillOpacity: 0.1,
-          fillColor: "#FF4739",
-          zIndex: 1
-        }
+          zIndex:10,
+          tr_radius: 33,
       },
       {
         position: [121.6873285, 31.22515044],
@@ -225,19 +219,26 @@ export default {
     this.customMarkers = customMarkers;
   },
   methods: {
-    add() {
+    add(lng, lat) {
       this.customMarkers.push({
-        position: [121.5673285, 31.23515044],
+        position: [lng, lat],
+        events: {
+          rightclick: e=>{
+            console.log(e)
+
+// this.map.remove(e.target)
+          },
+        },
         normalMarker: {
-          icon: "/point.png",
-          offset: [-16, -22]
+          icon: "/point_end.png",
+          offset: [-12, -38]
         },
         rippleMarker: {
-          radius: 32,
+          radius: 33,
           strokeColor: "#FF4739",
           strokeWeight: 1,
           strokeOpacity: 0.3,
-          offset: [-32, -33],
+          offset: [-33, -33],
           fillOpacity: 0.1,
           fillColor: "#FF4739"
         }

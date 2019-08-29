@@ -1,6 +1,9 @@
 <template>
   <!-- 水波纹圆形动画 -->
   <div class="ripple-content" :style="contentStyle">
+    <div class="ripple-needle">
+      <img :style="needleStyle" :src="tr_icon" />
+    </div>
     <div v-for="(_, index) in rippleCount" :key="index" :style="innerRippleStyle(index)"></div>
   </div>
 </template>
@@ -8,61 +11,84 @@
 export default {
   props: {
     /**
+     * 图标
+     */
+    tr_icon: {
+      type: String,
+      default: require("@/assets/point.png")
+    },
+    /**
+     * 图标偏移 默认图标中心点在中心  分别调整 left 和 top margin 可为负数 单位px
+     */
+    tr_iconOffset: {
+      type: Array,
+      default: () => [0, -16]
+    },
+    /**
      * 半径
      */
-    radius: {
+    tr_radius: {
       type: Number,
       default: 5
     },
     /**
-     * 边框
+     * 波纹外固定边框
      */
-    strokeStyle: {
+    tr_strokeStyle: {
       type: String,
       default: "none"
     },
     /**
-     * 波纹颜色
+     * 水波纹颜色
      */
-    rippleColor: {
+    tr_rippleColor: {
       type: String,
       default: "#ff4739"
     },
     /**
      * 动画时间 最好能被rippleRate整除 默认除以rippleRate向上取整
      */
-    rippleDuration: {
+    tr_rippleDuration: {
       type: Number,
       default: 6
     },
     /**
      * 动画速率 就是元素的动画时间差
      */
-    rippleRate: {
+    tr_rippleRate: {
       type: Number,
       default: 3
     }
   },
   computed: {
+    //波纹个数
     rippleCount() {
-      const count = Math.ceil(this.rippleDuration / this.rippleRate);
+      const count = Math.ceil(this.tr_rippleDuration / this.tr_rippleRate);
       return count;
     },
+    //波纹样式
     innerRippleStyle(index) {
       return index => {
         const c = {
-          "-webkit-animation": `wateranimate ${this.rippleDuration}s ${this
-            .rippleRate * index}s ease-out infinite`,
-          animation: `wateranimate ${this.rippleDuration}s ${this.rippleRate *
+          "-webkit-animation": `wateranimate ${this.tr_rippleDuration}s ${this
+            .tr_rippleRate * index}s ease-out infinite`,
+          animation: `wateranimate ${this.tr_rippleDuration}s ${this.tr_rippleRate *
             index}s ease-out infinite`,
           padding: "50%",
           position: "absolute",
-          "box-shadow": `0 0 120px 64px ${this.rippleColor} inset`,
+          "box-shadow": `0 0 120px 64px ${this.tr_rippleColor} inset`,
           "border-radius": "100%",
           "z-index": 1,
           opacity: 0
         };
         return c;
+      };
+    },
+    //大头针偏移
+    needleStyle() {
+      return {
+        "margin-left": this.tr_iconOffset[0] + "px",
+        "margin-top": this.tr_iconOffset[1] + "px"
       };
     }
   },
@@ -75,17 +101,26 @@ export default {
   mounted() {
     //处理样式
     this.contentStyle = {
-      width: this.radius * 2 + "px",
-      height: this.radius * 2 + "px",
-      border: this.strokeStyle,
+      width: this.tr_radius * 2 + "px",
+      height: this.tr_radius * 2 + "px",
+      border: this.tr_strokeStyle,
       "border-radius": "50%"
     };
   }
 };
 </script>
 <style lang="scss" scoped>
-@import "./TRipple.css";
+@import "./TRippleAnimation.css";
 .ripple-content {
   position: relative;
+
+  .ripple-needle {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>

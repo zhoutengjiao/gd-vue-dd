@@ -22,19 +22,9 @@
     <!-- ******************地图标记点****************** -->
     <template v-if="customMarkers != null">
       <template v-for="(marker,indexp) in customMarkers">
-        <!-- 定点图标marker -->
-        <el-amap-marker
-          v-if="marker.normalMarker"
-          v-bind="{...marker, ...marker.normalMarker}"
-          :key="indexp+'normalMarker'"
-        ></el-amap-marker>
-        <!-- 轮廓marker 可以有动画 -->
-        <el-amap-marker
-          v-if="marker.rippleMarker"
-          v-bind="{...marker, ...marker.rippleMarker}"
-          :key="indexp+'rippleMarker'"
-        >
-          <t-ripple-cicle v-bind="{...marker, ...marker.rippleMarker}"></t-ripple-cicle>
+        <!-- 简单的水波纹marker -->
+        <el-amap-marker v-bind="marker" :key="indexp+'rippleMarker'">
+          <t-ripple-cicle v-bind="marker"></t-ripple-cicle>
         </el-amap-marker>
       </template>
     </template>
@@ -142,6 +132,10 @@ export default {
             {
               pName: "Scale",
               position: "RB"
+            },
+            {
+              pName: "ToolBar",
+              position: "RT"
             }
           ]
         },
