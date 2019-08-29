@@ -41,6 +41,8 @@
     </t-gd-custom-map>
 
     <input type="button" @click="look" value="look" />
+    <input type="button" @click="line1" value="line1" />
+    <input type="button" @click="line2" value="line2" />
   </div>
 </template>
 
@@ -59,13 +61,17 @@ export default {
   },
   data: function() {
     return {
+      //声明自定义窗体数据
       infoData: {},
+      //窗体属性
       infoProp: {
         autoMove: false,
         position: [121.6873285, 31.22515044],
         visible: false
       },
+      //声明地图容器引用
       map: null,
+      //地图属性
       mapProp: {
         center: [121.59996, 31.197646],
         zoom: 12,
@@ -95,6 +101,7 @@ export default {
       polylines: [
         {
           lineJoin: "round",
+          uukey: getUUID(),
           path: [
             [121.5389385, 31.21515],
             [121.5389385, 31.22615044],
@@ -112,10 +119,10 @@ export default {
           events: {
             init: e => {
               e.setExtData({
-                ltype: "高压",
-                state: "运行",
-                nature: "自闭",
-                caizhi: "热缩",
+                ltype: "搞搞",
+                state: "跑一跑",
+                nature: "selfclose",
+                caizhi: "hot缩",
                 time: "2016-08-25",
                 lnglat: "116.350658,39.938285",
                 deep: "-175cm"
@@ -125,7 +132,7 @@ export default {
               const position = [e.lnglat.lng, e.lnglat.lat];
               this.infoProp.position = position;
               this.infoProp.visible = true;
-              this.infoData = {...e.target.getExtData(), lnglat:position};
+              this.infoData = { ...e.target.getExtData(), lnglat: position };
             },
             mouseover: e => {
               e.target.setOptions({
@@ -143,6 +150,7 @@ export default {
         },
         {
           lineJoin: "round",
+          uukey: getUUID(),
           path: [
             [121.5389385, 31.31515],
             [121.5389385, 31.32615044],
@@ -196,7 +204,7 @@ export default {
         offset: [-32, -32],
         tr_iconOffset: [2, -38],
         tr_icon: require("@/assets/point_start.png"),
-        label: { content: "施工", offset: [25, 38] },
+        label: { content: "开始", offset: [25, 38] },
         zIndex: 1,
         tr_radius: 32,
         events: {
@@ -210,7 +218,7 @@ export default {
       {
         position: [121.6873285, 31.22515044],
         offset: [-32, -32],
-        uukey:uukey2,
+        uukey: uukey2,
         tr_iconOffset: [2, -38],
         tr_icon: require("@/assets/point_end.png"),
         label: { content: "终点", offset: [25, 38] },
@@ -219,7 +227,7 @@ export default {
         events: {
           init: e => {
             e.setExtData({
-              uukey:uukey2
+              uukey: uukey2
             });
           }
         }
@@ -247,12 +255,12 @@ export default {
         offset: [-32, -32],
         tr_iconOffset: [2, -38],
         tr_icon: require("@/assets/point_end.png"),
-        label: { content: "终点", offset: [25, 38] },
+        label: { content: "挖坑", offset: [25, 38] },
         zIndex: 10,
-        tr_strokeStyle:"1px solid red",
-        tr_rippleColor:"green",
+        tr_strokeStyle: "1px solid red",
+        tr_rippleColor: "green",
         tr_radius: 32,
-        tr_showRipple: false,
+        tr_showRipple: false
       });
     },
     look() {
@@ -270,9 +278,110 @@ export default {
         const item_uukey = item.uukey;
         if (uukey === item_uukey) {
           return this.customMarkers.splice(i, 1);
-          // return this.customMarkerRefs.splice(i, 1);
         }
       }
+    },
+    line1() {
+      this.polylines = [
+        {
+          lineJoin: "round",
+          uukey: getUUID(),
+          path: [
+            [121.5389385, 31.21515],
+            [121.5389385, 31.22615044],
+            [121.5473285, 31.21515044],
+            [121.5573285, 31.22515044],
+            [121.5673285, 31.23515044],
+            [121.5773285, 31.21515044],
+            [121.5873285, 31.22515044],
+            [121.5973285, 31.21515044],
+            [121.6773285, 31.22515044],
+            [121.6873285, 31.22515044]
+          ],
+          strokeColor: "#f1b123",
+          strokeWeight: 6,
+          events: {
+            init: e => {
+              e.setExtData({
+                ltype: "搞搞",
+                state: "跑一跑",
+                nature: "selfclose",
+                caizhi: "hot缩",
+                time: "2016-08-25",
+                lnglat: "116.350658,39.938285",
+                deep: "-175cm"
+              });
+              this.map.setFitView([e]);
+            },
+            click: e => {
+              const position = [e.lnglat.lng, e.lnglat.lat];
+              this.infoProp.position = position;
+              this.infoProp.visible = true;
+              this.infoData = { ...e.target.getExtData(), lnglat: position };
+            },
+            mouseover: e => {
+              e.target.setOptions({
+                strokeColor: "#26C6DA",
+                strokeWeight: 8
+              });
+            },
+            mouseout: e => {
+              e.target.setOptions({
+                strokeColor: "#f1b123",
+                strokeWeight: 6
+              });
+            }
+          }
+        }
+      ];
+    },
+    line2() {
+      this.polylines = [
+        {
+          lineJoin: "round",
+          uukey: getUUID(),
+          path: [
+            [121.5389385, 31.31515],
+            [121.5389385, 31.32615044],
+            [121.5473285, 31.31515044],
+            [121.5573285, 31.32515044],
+            [121.5673285, 31.33515044],
+            [121.5773285, 31.31515044],
+            [121.5873285, 31.32515044],
+            [121.5973285, 31.31515044],
+            [121.6773285, 31.32515044],
+            [121.6873285, 31.32515044]
+          ],
+          strokeColor: "#f1b123",
+          strokeWeight: 6,
+          events: {
+            init: e => {
+              this.map.setFitView([e]);
+            },
+            click: e => {
+              console.log(e);
+            },
+            mouseover: e => {
+              e.target.setOptions({
+                strokeColor: "#26C6DA",
+                strokeWeight: 8
+              });
+              const position = [e.lnglat.lng, e.lnglat.lat];
+              this.infoProp.position = position;
+              this.infoProp.visible = true;
+              this.mapProp = {
+                center: position
+              };
+            },
+            mouseout: e => {
+              e.target.setOptions({
+                strokeColor: "#f1b123",
+                strokeWeight: 6
+              });
+            }
+          }
+        }
+      ];
     }
   }
 };

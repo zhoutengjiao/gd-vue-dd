@@ -4,17 +4,17 @@
     <template v-if="polylines != null">
       <!-- 线路路径 -->
       <el-amap-polyline
-        v-for="(polyline, index) in polylines"
+        v-for="polyline in polylines"
         v-bind="polyline"
-        :key="index+'polyline'"
+        :key="polyline.uukey"
       ></el-amap-polyline>
       <!-- 线路拐点markersGroup -->
-      <template v-for="(polylineCircleMarker,indexp) in innerPolylineCircleMarker">
+      <template v-for="polylineCircleMarker in innerPolylineCircleMarker">
         <!-- 线路拐点markers -->
         <el-amap-circle-marker
-          v-for="(marker,indexs) in polylineCircleMarker"
+          v-for="marker in polylineCircleMarker"
           v-bind="marker"
-          :key="indexp+'polylineMarker'+indexs"
+          :key="marker.uukey"
         ></el-amap-circle-marker>
       </template>
     </template>
@@ -96,6 +96,7 @@ export default {
               center: center,
               radius: value.strokeWeight ? value.strokeWeight : 4,
               zIndex: 100,
+              uukey: value.uukey,
               strokeWeight: 2,
               strokeColor: "blue",
               //   events: polyline.events,
@@ -122,7 +123,7 @@ export default {
     this.refreshMapData();
   },
   methods: {
-    //整理地图属性数据
+    //整理地图属性 默认数据
     refreshMapData() {
       this.innerMapProp = Object.assign(
         {},
@@ -150,7 +151,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .t-amap-map {
 }

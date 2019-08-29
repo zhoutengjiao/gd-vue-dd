@@ -5,7 +5,7 @@
       <img :style="needleStyle" :src="tr_icon" />
     </div>
     <template v-if="tr_showRipple">
-    <div v-for="(_, index) in rippleCount" :key="index" :style="innerRippleStyle(index)"></div>
+      <div v-for="(_, index) in rippleCount" :key="index" :style="innerRippleStyle(index)"></div>
     </template>
   </div>
 </template>
@@ -38,14 +38,14 @@ export default {
      */
     tr_radius: {
       type: Number,
-      default: 5
+      default: 16
     },
     /**
      * 是否显示水波纹动画
      */
     tr_showRipple: {
       type: Boolean,
-      default: true,
+      default: true
     },
     /**
      * 波纹外固定边框
@@ -88,8 +88,8 @@ export default {
         const c = {
           "-webkit-animation": `wateranimate ${this.tr_rippleDuration}s ${this
             .tr_rippleRate * index}s ease-out infinite`,
-          animation: `wateranimate ${this.tr_rippleDuration}s ${this.tr_rippleRate *
-            index}s ease-out infinite`,
+          animation: `wateranimate ${this.tr_rippleDuration}s ${this
+            .tr_rippleRate * index}s ease-out infinite`,
           padding: "50%",
           position: "absolute",
           "box-shadow": `0 0 120px 64px ${this.tr_rippleColor} inset`,
@@ -121,8 +121,7 @@ export default {
       height: this.tr_radius * 2 + "px",
       border: this.tr_strokeStyle,
       "border-radius": "50%",
-              "background-color": this.tr_fillColor,
-
+      "background-color": this.tr_fillColor
     };
   }
 };
