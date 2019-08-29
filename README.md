@@ -1,6 +1,6 @@
 # gddemo
 
->相关文档URL 
+>相关文档URL ..
 >高德地图Vue封装：https://elemefe.github.io/vue-amap/#/zh-cn/base/amap
 >高德地图开放平台：https://lbs.amap.com/api/javascript-api/reference/map
 
