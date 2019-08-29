@@ -21,9 +21,9 @@
 
     <!-- ******************地图标记点****************** -->
     <template v-if="customMarkers != null">
-      <template v-for="(marker,indexp) in customMarkers">
+      <template v-for="marker in customMarkers">
         <!-- 简单的水波纹marker -->
-        <el-amap-marker v-bind="marker" :key="indexp+'rippleMarker'">
+        <el-amap-marker v-bind="marker" :key="marker.uukey">
           <t-ripple-cicle v-bind="marker"></t-ripple-cicle>
         </el-amap-marker>
       </template>
@@ -36,6 +36,9 @@
 </template>
 
 <script>
+/**
+ * 因为用到了循环 所有marker 必须提供uukey作为唯一键key的值
+ */
 import TRippleCicle from "./TRippleCicle";
 export default {
   name: "HelloWorld",

@@ -4,7 +4,9 @@
     <div class="ripple-needle">
       <img :style="needleStyle" :src="tr_icon" />
     </div>
+    <template v-if="tr_showRipple">
     <div v-for="(_, index) in rippleCount" :key="index" :style="innerRippleStyle(index)"></div>
+    </template>
   </div>
 </template>
 <script>
@@ -25,11 +27,25 @@ export default {
       default: () => [0, -16]
     },
     /**
+     * 容器背景颜色
+     */
+    tr_fillColor: {
+      type: String,
+      default: "transparent"
+    },
+    /**
      * 半径
      */
     tr_radius: {
       type: Number,
       default: 5
+    },
+    /**
+     * 是否显示水波纹动画
+     */
+    tr_showRipple: {
+      type: Boolean,
+      default: true,
     },
     /**
      * 波纹外固定边框
@@ -104,7 +120,9 @@ export default {
       width: this.tr_radius * 2 + "px",
       height: this.tr_radius * 2 + "px",
       border: this.tr_strokeStyle,
-      "border-radius": "50%"
+      "border-radius": "50%",
+              "background-color": this.tr_fillColor,
+
     };
   }
 };
@@ -113,12 +131,12 @@ export default {
 @import "./TRippleAnimation.css";
 .ripple-content {
   position: relative;
-
   .ripple-needle {
     position: absolute;
     display: flex;
     width: 100%;
     height: 100%;
+    z-index: 10;
     justify-content: center;
     align-items: center;
   }
