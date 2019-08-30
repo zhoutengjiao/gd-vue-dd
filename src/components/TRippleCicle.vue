@@ -1,9 +1,11 @@
 <template>
   <!-- 水波纹圆形动画 -->
   <div class="ripple-content" :style="contentStyle">
+    <!-- 大头针icon -->
     <div class="ripple-needle">
       <img :style="needleStyle" :src="tr_icon" />
     </div>
+    <!-- 波纹动画元素 -->
     <template v-if="tr_showRipple">
       <div v-for="(_, index) in rippleCount" :key="index" :style="innerRippleStyle(index)"></div>
     </template>

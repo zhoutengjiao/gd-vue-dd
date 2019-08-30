@@ -77,7 +77,7 @@ export default {
         zoom: 12,
         events: {
           //地图初始化完成 并加载完子图层
-          complete: e => {
+          complete: () => {
             this.map.setFitView();
           },
           init: e => {

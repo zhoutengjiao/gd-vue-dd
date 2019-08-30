@@ -41,7 +41,7 @@
  */
 import TRippleCicle from "./TRippleCicle";
 export default {
-  name: "HelloWorld",
+  name: "TGdCustomMap",
   components: {
     TRippleCicle
   },
@@ -68,9 +68,8 @@ export default {
     },
     //地图标记点 支持icon 轮廓  水波纹动画
     /**
-     * 每一项有下面两个属性 可以在内层定义各自的属性 外层属性为公共属性
-     * normalMarker //普通marker 属性和官网文档一样
-     * rippleMarker //波纹marker 相关属性看 RippleCicle
+     * marker属性和官网文档一样
+     * 水波纹属性看 RippleCicle
      */
     customMarkers: {
       type: Array,
