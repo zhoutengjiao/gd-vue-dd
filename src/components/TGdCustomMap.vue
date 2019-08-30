@@ -11,11 +11,9 @@
       <!-- 线路拐点markersGroup -->
       <template v-for="polylineCircleMarker in innerPolylineCircleMarker">
         <!-- 线路拐点markers -->
-        <el-amap-circle-marker
-          v-for="marker in polylineCircleMarker"
-          v-bind="marker"
-          :key="marker.uukey"
-        ></el-amap-circle-marker>
+        <el-amap-marker v-bind="marker" v-for="marker in polylineCircleMarker" :key="marker.uukey">
+          <t-ripple-cicle v-bind="marker"></t-ripple-cicle>
+        </el-amap-marker>
       </template>
     </template>
 
@@ -62,6 +60,7 @@ export default {
       default: () => null
     },
     //线路拐点 每一项认为是一条线的所有拐点 如果不填 则根据polylines里每条线的坐标、颜色默认显示 innerPolylineCircleMarker
+    //和普通点用的组件一样 但是拐点的语义让我把他们的结构分开
     polylineCircleMarkers: {
       type: Array,
       default: () => []
@@ -87,22 +86,28 @@ export default {
         let markersGroup = [];
         this.polylines.forEach(polyline => {
           let markers = [];
-          polyline.path.forEach(value => {
+          polyline.path.forEach((value,index,arr) => {
             //地图线路应该是直接引用了 这里value值由数组变成了 对象类型 center需要数组类型
             const center =
               value instanceof Array ? value : [value.lng, value.lat];
             markers.push({
-              center: center,
-              radius: value.strokeWeight ? value.strokeWeight : 4,
-              zIndex: 100,
+              position: center,
+              tr_showIcon: false,
+              tr_radius: value.strokeWeight ? value.strokeWeight : 4,
+              zIndex: (index==0 || index == arr.length-1) ?100:1,
               uukey: value.uukey,
-              strokeWeight: 2,
+              tr_strokeStyle: "2px solid blue",
               strokeColor: "blue",
               //   events: polyline.events,
-              fillColor: "#fff"
+            offset: [-5, -5],
+              fillColor: "#fff",
+              tr_fillColor: "#fff"
             });
+
           });
+          
           markersGroup.push(markers);
+          
         });
         return markersGroup;
       }

@@ -202,10 +202,10 @@ export default {
         position: [121.5389385, 31.21515],
         uukey,
         offset: [-32, -32],
-        tr_iconOffset: [2, -38],
+        tr_iconOffset: [0, -36],
         tr_icon: require("@/assets/point_start.png"),
         label: { content: "开始", offset: [25, 38] },
-        zIndex: 1,
+        zIndex: 50,
         tr_radius: 32,
         events: {
           init: e => {
@@ -219,10 +219,10 @@ export default {
         position: [121.6873285, 31.22515044],
         offset: [-32, -32],
         uukey: uukey2,
-        tr_iconOffset: [2, -38],
+        tr_iconOffset: [0, -36],
         tr_icon: require("@/assets/point_end.png"),
         label: { content: "终点", offset: [25, 38] },
-        zIndex: 1,
+        zIndex: 50,
         tr_radius: 32,
         events: {
           init: e => {
@@ -241,6 +241,8 @@ export default {
       this.customMarkers.push({
         position: [lng, lat],
         uukey,
+        draggable: true,
+        raiseOnDrag: true,
         events: {
           init: e => {
             e.setExtData({
@@ -250,17 +252,20 @@ export default {
           rightclick: e => {
             let uukey = e.target.getExtData().uukey;
             this.reduce(uukey);
+          },
+          dragend: e => {
+            console.log(e)
           }
         },
         offset: [-32, -32],
-        tr_iconOffset: [2, -38],
+        tr_iconOffset: [0, -36],
         tr_icon: require("@/assets/point_end.png"),
         label: { content: "挖坑", offset: [25, 38] },
         zIndex: 10,
         tr_strokeStyle: "1px solid red",
         tr_rippleColor: "green",
         tr_radius: 32,
-        tr_showRipple: false
+        tr_showRipple: true
       });
     },
     look() {

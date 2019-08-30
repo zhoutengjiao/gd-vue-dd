@@ -2,7 +2,7 @@
   <!-- 水波纹圆形动画 -->
   <div class="ripple-content" :style="contentStyle">
     <!-- 大头针icon -->
-    <div class="ripple-needle">
+    <div class="ripple-needle" v-if="tr_showIcon">
       <img :style="needleStyle" :src="tr_icon" />
     </div>
     <!-- 波纹动画元素 -->
@@ -14,6 +14,13 @@
 <script>
 export default {
   props: {
+    /**
+     * 是否显示图标
+     */
+    tr_showIcon: {
+      type: Boolean,
+      default: true,
+    },
     /**
      * 图标
      */
@@ -47,7 +54,7 @@ export default {
      */
     tr_showRipple: {
       type: Boolean,
-      default: true
+      default: false
     },
     /**
      * 波纹外固定边框
